@@ -44,19 +44,24 @@ export class MockRepository implements IMockRepository {
     //return this.connection.createQueryBuilder(MockSchema,'u').where('u.id = :id', {id}).getOne();
   }
 
-  async incluir(registro: Mock) {
+  async incluir(registro: Mock): Promise<Mock> {
     registro.id = uuidv4();
     this.listaMocks.push(registro);
+    return registro;
     //this.entityManager.insert(MockSchema, registro);
   }
 
   async alterar(registro: Mock) {
+    await this.remover(registro.id);
+    this.listaMocks.push(registro);
     //this.entityManager.update<MockSchema>(registro.id);
     //await this.entityManager.update(MockSchema, registro.id, registro);
     //this.entityManager.save(MockSchema, registro);
   }
 
   async remover(id: string) {
+    let index = this.listaMocks.findIndex(x => x.id == id);
+    this.listaMocks.splice(index, 1);
     //this.entityManager.delete(MockSchema, id);
   }
 }

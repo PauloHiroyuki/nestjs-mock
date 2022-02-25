@@ -13,14 +13,14 @@ export class MockService {
         private repositorio: IMockRepository
     ) {}
 
-    async incluir(input: MockRequest) {
+    async incluir(input: MockRequest): Promise<Mock> {
         var mockCadastrado = await this.repositorio.pesquisarPorUrl(input.url);        
         if (!!mockCadastrado) {
             throw new ExcecaoDeNegocio('URL já cadastrada.');
         }
 
         var registro = new Mock(null, input.url, input.httpStatus, input.contentType, input.charset, input.headers, input.body);
-        this.repositorio.incluir(registro);
+        return this.repositorio.incluir(registro);
     }
 
     async alterar(id: string, input: MockRequest) {
@@ -30,8 +30,12 @@ export class MockService {
         }
 
         var registro = await this.repositorio.pesquisar(id);
-        //registro.login = input.login;
-        //registro.senha = input.senha;
+        registro.url = input.url;
+        registro.httpStatus = input.httpStatus;
+        registro.contentType = input.contentType;
+        registro.charset = input.charset;
+        registro.headers = input.headers;
+        registro.body = input.body;
 
         this.repositorio.alterar(registro);
     }

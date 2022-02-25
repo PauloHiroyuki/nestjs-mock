@@ -8,7 +8,7 @@ export class MockController {
 
   @Post()
   async incluir(@Body() registro: MockRequest) {
-    await this.mockService.incluir(registro);
+    return await this.mockService.incluir(registro);
   }
 
   @Put(':id')
