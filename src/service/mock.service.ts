@@ -19,9 +19,7 @@ export class MockService {
             throw new ExcecaoDeNegocio('URL já cadastrada.');
         }
 
-        console.log(input);
         var registro = new Mock(null, input.url, input.httpStatus, input.contentType, input.charset, input.headers, input.body);
-        console.log(registro);
         this.repositorio.incluir(registro);
     }
 
