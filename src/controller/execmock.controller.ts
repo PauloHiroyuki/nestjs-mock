@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Res } from "@nestjs/common";
+import { Controller, Get, Post, Body, Put, Param, Delete, Res, Patch } from "@nestjs/common";
 import { Response } from "express";
 import { MockService } from "src/service/mock.service";
 
-@Controller('exec')
+@Controller('')
 export class ExecMockController {
   constructor(private mockService: MockService){}
 
@@ -23,6 +23,11 @@ export class ExecMockController {
 
   @Get('*')
   async pesquisar(@Param() params, @Res() response: Response) {
+    return this.executar(params, response);
+  }
+
+  @Patch('*')
+  async patch(@Param() params, @Res() response: Response) {
     return this.executar(params, response);
   }
 
