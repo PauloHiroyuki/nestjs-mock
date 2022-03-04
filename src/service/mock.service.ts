@@ -1,7 +1,7 @@
 import { Injectable, Inject, NotFoundException, HttpException, HttpStatus } from "@nestjs/common";
 import { Mock } from "src/domain/mock";
 import { IMockRepository } from "src/domain/repository/mock.repository";
-import { MockRepository } from "src/repository/implentacoes/mock.repository";
+import { MockRepository } from "src/repository/dynamo/implementacoes/mock.repository";
 import { ExcecaoDeNegocio } from "../common/erro/excecao-negocio";
 import { MockRequest } from "./request/mock.request";
 import { MockResponse } from "./response/mock.response";
@@ -14,12 +14,15 @@ export class MockService {
     ) {}
 
     async incluir(input: MockRequest): Promise<Mock> {
+        console.log('0');
         var mockCadastrado = await this.repositorio.pesquisarPorUrl(input.url);        
         if (!!mockCadastrado) {
             throw new ExcecaoDeNegocio('URL já cadastrada.');
         }
+        console.log('1');
 
         var registro = new Mock(null, input.url, input.httpStatus, input.contentType, input.charset, input.headers, input.body);
+        console.log('2');
         return this.repositorio.incluir(registro);
     }
 

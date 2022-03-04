@@ -6,6 +6,7 @@ import { Injectable, Inject } from '@nestjs/common';
 //import { InjectRepository } from '@nestjs/typeorm';
 import { IMockRepository } from '../../domain/repository/mock.repository';
 import {v4 as uuidv4} from 'uuid';
+import dynamoDb from '../dynamo/dynamo'
 
 @Injectable()
 export class MockRepository implements IMockRepository {
@@ -20,16 +21,22 @@ export class MockRepository implements IMockRepository {
 
 
   async listar(): Promise<Mock[]> {
-    return this.listaMocks;
-    //return this.entityManager.find(Mock);
-    //var consulta = this.connection.createQueryBuilder(MockSchema,'u');
-    //return consulta.getMany();
+    console.log('itens');
+    const itens = await dynamoDb.scan({
+      TableName: 'mck-mock',
+    });
+    console.log(itens);
+    return itens.Items;
   }
 
   async pesquisar(id: string): Promise<Mock> {
-    return this.listaMocks.find(x => x.id == id);
-    //return this.entityManager.findOne(Mock, id);    
-    //return this.connection.createQueryBuilder(MockSchema,'u').where('u.id = :id', {id}).getOne();
+    const { Item } = await dynamoDb.get({
+      TableName: 'mck-mock',
+      Key: {
+        id
+      }
+    });
+    return Item;
   }
 
   async pesquisarPorUrl(url: string): Promise<Mock> {

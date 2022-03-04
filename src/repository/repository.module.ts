@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 //import { TypeOrmModule } from '@nestjs/typeorm';
-import { MockRepository } from './implentacoes/mock.repository';
+import { MockRepository } from './dynamo/implementacoes/mock.repository';
 //import { UsuarioSchema } from './schema/usuario.schema';
 //import { TesteRepository } from './implentacoes/teste.repository';
 import { Mock } from '../domain/mock';
