@@ -2,7 +2,7 @@ import { Mock } from "../../domain/mock";
 
 export class MockResponse {
     id: string;
-    url: string;
+    endereco: string;
     httpStatus: number;
     contentType: string;
     charset: string;
@@ -13,7 +13,7 @@ export class MockResponse {
         if (usuario == null) return null;
         var registro = new MockResponse();
         registro.id = usuario.id;
-        registro.url = usuario.url;
+        registro.endereco = usuario.endereco;
         registro.httpStatus = usuario.httpStatus;
         registro.contentType = usuario.contentType;
         registro.charset = usuario.charset;

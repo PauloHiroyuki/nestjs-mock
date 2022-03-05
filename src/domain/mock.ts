@@ -2,7 +2,7 @@
 
 export class Mock {
     id: string;
-    url: string;
+    endereco: string;
     httpStatus: number;
     contentType: string;
     charset: string;
@@ -10,11 +10,11 @@ export class Mock {
     body: string; 
 
 
-    constructor(id: string, url: string, httpStatus: number, contentType: string, charset: string, headers: string, body: string) {        
+    constructor(id: string, endereco: string, httpStatus: number, contentType: string, charset: string, headers: string, body: string) {        
         //this.login = ValidationDomain.notNull(login, 'Campo login é obrigatório');
         //this.senha = ValidationDomain.notNull(senha, 'Campo senha é obrigatório');
         this.id = id;
-        this.url = url;
+        this.endereco = endereco;
         this.httpStatus = httpStatus;
         this.contentType = contentType;
         this.charset = charset;

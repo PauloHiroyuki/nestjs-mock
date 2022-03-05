@@ -3,9 +3,9 @@ import { IsNotEmpty, IsString, IsEmail } from 'class-validator';
 export class MockRequest {
     
     @IsNotEmpty({
-        message: 'url é obrigatório.'
+        message: 'endereco é obrigatório.'
     })
-    url: string;
+    endereco: string;
     
     @IsNotEmpty({
         message: 'Status Code é obrigatório.'

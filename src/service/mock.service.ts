@@ -14,26 +14,26 @@ export class MockService {
     ) {}
 
     async incluir(input: MockRequest): Promise<Mock> {
-        console.log('0');
-        var mockCadastrado = await this.repositorio.pesquisarPorUrl(input.url);        
-        if (!!mockCadastrado) {
-            throw new ExcecaoDeNegocio('URL já cadastrada.');
-        }
-        console.log('1');
+        let mockCadastrado = await this.repositorio.pesquisarPorEndereco(input.endereco); 
 
-        var registro = new Mock(null, input.url, input.httpStatus, input.contentType, input.charset, input.headers, input.body);
-        console.log('2');
-        return this.repositorio.incluir(registro);
+        console.log(mockCadastrado);
+
+        if (!!mockCadastrado) {
+            throw new ExcecaoDeNegocio('Endereço já cadastrada.');
+        }
+
+        var registro = new Mock(null, input.endereco, input.httpStatus, input.contentType, input.charset, input.headers, input.body);
+        return await this.repositorio.incluir(registro);
     }
 
     async alterar(id: string, input: MockRequest) {
-        var mockCadastrado = await this.repositorio.pesquisarPorUrlDiferenteDoId(input.url, id);
+        var mockCadastrado = await this.repositorio.pesquisarPorEnderecoDiferenteDoId(input.endereco, id);
         if (!!mockCadastrado) {
-            throw new ExcecaoDeNegocio('URL já cadastrada.');
+            throw new ExcecaoDeNegocio('Endereço já cadastrada.');
         }
 
         var registro = await this.repositorio.pesquisar(id);
-        registro.url = input.url;
+        registro.endereco = input.endereco;
         registro.httpStatus = input.httpStatus;
         registro.contentType = input.contentType;
         registro.charset = input.charset;
@@ -47,8 +47,8 @@ export class MockService {
         return MockResponse.convert(await this.repositorio.pesquisar(id));
     }
 
-    async pesquisarPorUrl(url: string): Promise<MockResponse> {
-        return MockResponse.convert(await this.repositorio.pesquisarPorUrl(url));
+    async pesquisarPorEndereco(endereco: string): Promise<MockResponse> {
+        return MockResponse.convert(await this.repositorio.pesquisarPorEndereco(endereco));
     }
 
     async remover(id: string) {

@@ -32,13 +32,13 @@ export class ExecMockController {
   }
 
   async executar(params, response: Response) {
-    let url = params[0];
+    let endereco = params[0];
 
-    let mock = await this.mockService.pesquisarPorUrl(url);
+    let mock = await this.mockService.pesquisarPorEndereco(endereco);
     if (mock == null) {
       return response
         .status(404)
-        .send('Não foi entrado mock para esta url "' + url + '"');
+        .send('Não foi entrado mock para esta endereco "' + endereco + '"');
     }
     let header = JSON.parse(mock.headers);
 
