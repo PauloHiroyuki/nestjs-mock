@@ -8,6 +8,10 @@ import dynamoDb from '../dynamo'
 @Injectable()
 export class MockRepository implements IMockRepository {
   async listar(): Promise<Mock[]> {
+
+    console.log(process.env.AWS_REGION);
+    console.log(process.env.AWS_KEY);
+
     return dynamoDb.scan({
       TableName: 'mck-mock',
     }).promise().then(x => x.Items);

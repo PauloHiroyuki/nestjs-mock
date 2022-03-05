@@ -1,9 +1,9 @@
 var { DynamoDB } = require("aws-sdk");
 
 const dynamoDb = new DynamoDB.DocumentClient({
-    accessKeyId: 'AKIA45BWE46JXZCZGYJA',
-    secretAccessKey: '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',
-    region: 'sa-east-1'
+    accessKeyId: process.env.AWS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+    region: process.env.AWS_REGION
 });
 
 export default dynamoDb;
