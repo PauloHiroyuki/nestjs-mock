@@ -30,7 +30,7 @@ export class FitroDeExcecaoHttp implements ExceptionFilter {
                 body: {
                     statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
                     timestamp: new Date().toISOString(),
-                    message: 'exception.message',
+                    message: exception,
                     path: requisicao.path
                 }
             };

@@ -30,7 +30,7 @@ export class MockRepository implements IMockRepository {
     }).promise().then(x => x.Item);
   }
 
-  async pesquisarPorEndereco(endereco: string): Promise<Mock> {
+  async pesquisarPorEndereco(endereco: string): Promise<Mock[]> {
     return this.dynamoDb.scan({
       TableName: 'mck-mock',
       FilterExpression: 'endereco = :endereco',
@@ -40,13 +40,13 @@ export class MockRepository implements IMockRepository {
     }).promise().then(x => x.Items);
   }
 
-  async pesquisarPorEnderecoDiferenteDoId(endereco: string, id: string): Promise<Mock> {
+  async pesquisarPorEnderecoDiferenteDoId(endereco: string, id: string): Promise<Mock[]> {
     return this.dynamoDb.scan({
       TableName: 'mck-mock',
-      FilterExpression: 'endereco = :endereco AND id <> :hid',
+      FilterExpression: 'endereco = :endereco and id <> :id',
       ExpressionAttributeValues: {
         ':endereco': endereco,
-        ':hid': id,
+        ':id': id,
       }
     }).promise().then(x => x.Items);
   }

@@ -14,8 +14,8 @@ export class MockService {
     ) {}
 
     async incluir(input: MockRequest): Promise<Mock> {
-        let mockCadastrado = await this.repositorio.pesquisarPorEndereco(input.endereco); 
-        if (!!mockCadastrado) {
+        let mockCadastrado = await this.repositorio.pesquisarPorEndereco(input.endereco);
+        if (mockCadastrado.length > 0) {
             throw new ExcecaoDeNegocio('Endereço já cadastrada.');
         }
 
@@ -25,7 +25,7 @@ export class MockService {
 
     async alterar(id: string, input: MockRequest) {
         var mockCadastrado = await this.repositorio.pesquisarPorEnderecoDiferenteDoId(input.endereco, id);
-        if (!!mockCadastrado) {
+        if (mockCadastrado.length > 0) {
             throw new ExcecaoDeNegocio('Endereço já cadastrada.');
         }
 
@@ -45,7 +45,11 @@ export class MockService {
     }
 
     async pesquisarPorEndereco(endereco: string): Promise<MockResponse> {
-        return MockResponse.convert(await this.repositorio.pesquisarPorEndereco(endereco));
+        let mocks: Mock[] = await this.repositorio.pesquisarPorEndereco(endereco);
+        if (mocks.length == 0) {
+            throw new NotFoundException('Endereço não cadastrado.');
+        }
+        return MockResponse.convert(mocks[0]);
     }
 
     async remover(id: string) {
