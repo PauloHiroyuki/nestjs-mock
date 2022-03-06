@@ -20,7 +20,7 @@ export class MockService {
         }
 
         var registro = new Mock(null, input.endereco, input.httpStatus, input.contentType, input.charset, input.headers, input.body);
-        return await this.repositorio.incluir(registro);
+        return this.repositorio.incluir(registro);
     }
 
     async alterar(id: string, input: MockRequest) {
@@ -41,7 +41,12 @@ export class MockService {
     }
 
     async pesquisar(id: string): Promise<MockResponse> {
-        return MockResponse.convert(await this.repositorio.pesquisar(id));
+        let mockCadastrado = await this.repositorio.pesquisar(id);
+        if (mockCadastrado == null) {
+            throw new NotFoundException('Registro não encontrado.');
+        }
+
+        return MockResponse.convert(mockCadastrado);
     }
 
     async pesquisarPorEndereco(endereco: string): Promise<MockResponse> {

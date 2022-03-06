@@ -58,7 +58,7 @@ export class MockRepository implements IMockRepository {
     return this.dynamoDb.put({
       TableName,
       Item : registro,
-    }).promise();
+    }).promise().then(() => registro);
   }
 
   async alterar(registro: Mock) {
@@ -69,7 +69,6 @@ export class MockRepository implements IMockRepository {
   }
 
   async remover(id: string) {
-    console.log(id);
     return this.dynamoDb.delete({
       TableName,
       Key: {
