@@ -15,9 +15,6 @@ export class MockService {
 
     async incluir(input: MockRequest): Promise<Mock> {
         let mockCadastrado = await this.repositorio.pesquisarPorEndereco(input.endereco); 
-
-        console.log(mockCadastrado);
-
         if (!!mockCadastrado) {
             throw new ExcecaoDeNegocio('Endereço já cadastrada.');
         }

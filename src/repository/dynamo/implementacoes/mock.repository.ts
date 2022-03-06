@@ -3,22 +3,26 @@ import { Mock } from '../../../domain/mock';
 import { Injectable, Inject } from '@nestjs/common';
 import { IMockRepository } from '../../../domain/repository/mock.repository';
 import {v4 as uuidv4} from 'uuid';
-import dynamoDb from '../dynamo'
+import { DynamoConfig } from '../dynamo';
 
 @Injectable()
 export class MockRepository implements IMockRepository {
+  
+  dynamoDb;
+
+  constructor(
+    @Inject(DynamoConfig) dynamoConfig: DynamoConfig) {
+      this.dynamoDb = dynamoConfig.dynamoDb;
+  }
+
   async listar(): Promise<Mock[]> {
-
-    console.log(process.env.AWS_REGION);
-    console.log(process.env.AWS_KEY);
-
-    return dynamoDb.scan({
+    return this.dynamoDb.scan({
       TableName: 'mck-mock',
     }).promise().then(x => x.Items);
   }
 
   async pesquisar(id: string): Promise<Mock> {
-    return dynamoDb.get({
+    return this.dynamoDb.get({
       TableName: 'mck-mock',
       Key: {
         id
@@ -27,7 +31,7 @@ export class MockRepository implements IMockRepository {
   }
 
   async pesquisarPorEndereco(endereco: string): Promise<Mock> {
-    return dynamoDb.scan({
+    return this.dynamoDb.scan({
       TableName: 'mck-mock',
       FilterExpression: 'endereco = :endereco',
       ExpressionAttributeValues: {
@@ -37,7 +41,7 @@ export class MockRepository implements IMockRepository {
   }
 
   async pesquisarPorEnderecoDiferenteDoId(endereco: string, id: string): Promise<Mock> {
-    return dynamoDb.scan({
+    return this.dynamoDb.scan({
       TableName: 'mck-mock',
       FilterExpression: 'endereco = :endereco AND id <> :hid',
       ExpressionAttributeValues: {
@@ -49,21 +53,21 @@ export class MockRepository implements IMockRepository {
 
   async incluir(registro: Mock): Promise<Mock> {
     registro.id = uuidv4();
-    return dynamoDb.put({
+    return this.dynamoDb.put({
       TableName: 'mck-mock',
       Item : registro,
     }).promise();
   }
 
   async alterar(registro: Mock) {
-    return dynamoDb.put({
+    return this.dynamoDb.put({
       TableName: 'mck-mock',
       Item : registro,      
     }).promise();
   }
 
   async remover(id: string) {
-    return dynamoDb.delete({
+    return this.dynamoDb.delete({
       TableName: 'mck-mock',
       Key: {
         HashKey: 'id',
