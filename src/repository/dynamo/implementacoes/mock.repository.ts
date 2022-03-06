@@ -5,6 +5,8 @@ import { IMockRepository } from '../../../domain/repository/mock.repository';
 import {v4 as uuidv4} from 'uuid';
 import { DynamoConfig } from '../dynamo';
 
+const TableName = 'mck-mock';
+
 @Injectable()
 export class MockRepository implements IMockRepository {
   
@@ -17,13 +19,13 @@ export class MockRepository implements IMockRepository {
 
   async listar(): Promise<Mock[]> {
     return this.dynamoDb.scan({
-      TableName: 'mck-mock',
+      TableName,
     }).promise().then(x => x.Items);
   }
 
   async pesquisar(id: string): Promise<Mock> {
     return this.dynamoDb.get({
-      TableName: 'mck-mock',
+      TableName,
       Key: {
         id
       }
@@ -32,7 +34,7 @@ export class MockRepository implements IMockRepository {
 
   async pesquisarPorEndereco(endereco: string): Promise<Mock[]> {
     return this.dynamoDb.scan({
-      TableName: 'mck-mock',
+      TableName,
       FilterExpression: 'endereco = :endereco',
       ExpressionAttributeValues: {
         ':endereco': endereco,
@@ -42,7 +44,7 @@ export class MockRepository implements IMockRepository {
 
   async pesquisarPorEnderecoDiferenteDoId(endereco: string, id: string): Promise<Mock[]> {
     return this.dynamoDb.scan({
-      TableName: 'mck-mock',
+      TableName,
       FilterExpression: 'endereco = :endereco and id <> :id',
       ExpressionAttributeValues: {
         ':endereco': endereco,
@@ -54,24 +56,24 @@ export class MockRepository implements IMockRepository {
   async incluir(registro: Mock): Promise<Mock> {
     registro.id = uuidv4();
     return this.dynamoDb.put({
-      TableName: 'mck-mock',
+      TableName,
       Item : registro,
     }).promise();
   }
 
   async alterar(registro: Mock) {
     return this.dynamoDb.put({
-      TableName: 'mck-mock',
+      TableName,
       Item : registro,      
     }).promise();
   }
 
   async remover(id: string) {
+    console.log(id);
     return this.dynamoDb.delete({
-      TableName: 'mck-mock',
+      TableName,
       Key: {
-        HashKey: 'id',
-        NumberRangeKey: id
+        id: id,
       }
     }).promise();
   }

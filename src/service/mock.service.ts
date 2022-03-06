@@ -53,7 +53,7 @@ export class MockService {
     }
 
     async remover(id: string) {
-        this.repositorio.remover(id);
+        await this.repositorio.remover(id);
     }
 
     async listar(): Promise<MockResponse[]> {
