@@ -57,7 +57,7 @@ export class MockRepository implements IMockRepository {
     registro.id = uuidv4();
     return this.dynamoDb.put({
       TableName,
-      Item : registro,
+      Item : registro
     }).promise().then(() => registro);
   }
 

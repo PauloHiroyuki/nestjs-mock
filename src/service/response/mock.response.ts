@@ -1,4 +1,6 @@
+import { Requisicao } from "src/domain/requisicao";
 import { Mock } from "../../domain/mock";
+import { RequisicaoResponse } from "./requisicao.response";
 
 export class MockResponse {
     id: string;
@@ -8,21 +10,24 @@ export class MockResponse {
     charset: string;
     headers: string;
     body: string; 
+    requisicoes: RequisicaoResponse[];
 
-    static convert(usuario: Mock): MockResponse {
-        if (usuario == null) return null;
+    static convert(mock: Mock): MockResponse {
+        if (mock == null) return null;
         var registro = new MockResponse();
-        registro.id = usuario.id;
-        registro.endereco = usuario.endereco;
-        registro.httpStatus = usuario.httpStatus;
-        registro.contentType = usuario.contentType;
-        registro.charset = usuario.charset;
-        registro.headers = usuario.headers;
-        registro.body = usuario.body; 
+        registro.id = mock.id;
+        registro.endereco = mock.endereco;
+        registro.httpStatus = mock.httpStatus;
+        registro.contentType = mock.contentType;
+        registro.charset = mock.charset;
+        registro.headers = mock.headers;
+        registro.body = mock.body; 
+        registro.requisicoes = RequisicaoResponse.convertList(mock.requisicoes);
         return registro;
     }
     
     static convertList(lista: Mock[]): any {
-        return lista.map(usuario => this.convert(usuario));
+        if (lista == null) return null;
+        return lista.map(mock => this.convert(mock));
     }
 }

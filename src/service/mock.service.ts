@@ -1,6 +1,7 @@
 import { Injectable, Inject, NotFoundException, HttpException, HttpStatus } from "@nestjs/common";
 import { Mock } from "src/domain/mock";
 import { IMockRepository } from "src/domain/repository/mock.repository";
+import { Requisicao } from "src/domain/requisicao";
 import { MockRepository } from "src/repository/dynamo/implementacoes/mock.repository";
 import { ExcecaoDeNegocio } from "../common/erro/excecao-negocio";
 import { MockRequest } from "./request/mock.request";
@@ -13,14 +14,15 @@ export class MockService {
         private repositorio: IMockRepository
     ) {}
 
-    async incluir(input: MockRequest): Promise<Mock> {
+    async incluir(input: MockRequest): Promise<string> {
         let mockCadastrado = await this.repositorio.pesquisarPorEndereco(input.endereco);
         if (mockCadastrado.length > 0) {
             throw new ExcecaoDeNegocio('Endereço já cadastrada.');
         }
 
-        var registro = new Mock(null, input.endereco, input.httpStatus, input.contentType, input.charset, input.headers, input.body);
-        return this.repositorio.incluir(registro);
+        var registro = new Mock(null, input.endereco, input.httpStatus, input.contentType, input.charset, input.headers, input.body, []);
+        var registroGravado = this.repositorio.incluir(registro);
+        return (await registroGravado).id;
     }
 
     async alterar(id: string, input: MockRequest) {
@@ -30,6 +32,10 @@ export class MockService {
         }
 
         var registro = await this.repositorio.pesquisar(id);
+        if (registro == null) {
+            throw new NotFoundException('Registro não encontrado.');
+        }
+
         registro.endereco = input.endereco;
         registro.httpStatus = input.httpStatus;
         registro.contentType = input.contentType;
@@ -64,4 +70,14 @@ export class MockService {
     async listar(): Promise<MockResponse[]> {
         return MockResponse.convertList(await this.repositorio.listar());
     }
+
+   async adicionarRequisicao(id: string, requisicao: Requisicao) {
+    let mockCadastrado = await this.repositorio.pesquisar(id);
+    if (mockCadastrado == null) {
+        throw new NotFoundException('Registro não encontrado.');
+    }
+       
+    mockCadastrado.requisicoes.push(requisicao);
+    this.repositorio.alterar(mockCadastrado);
+   }
 }
