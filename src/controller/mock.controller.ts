@@ -30,4 +30,9 @@ export class MockController {
   async listar() {
     return await this.mockService.listar();
   }
+
+  @Delete(':id/requisicao')
+  async deletarRequisicoes(@Param() params) {
+    return await this.mockService.limparRequisicoes(params.id);
+  }
 }

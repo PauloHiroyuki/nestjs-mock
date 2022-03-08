@@ -11,6 +11,8 @@ export class MockResponse {
     headers: string;
     body: string; 
     requisicoes: RequisicaoResponse[];
+    ativo: boolean;
+    gravarRequisicao: boolean;
 
     static convert(mock: Mock): MockResponse {
         if (mock == null) return null;
@@ -23,6 +25,8 @@ export class MockResponse {
         registro.headers = mock.headers;
         registro.body = mock.body; 
         registro.requisicoes = RequisicaoResponse.convertList(mock.requisicoes);
+        registro.ativo = mock.ativo;
+        registro.gravarRequisicao = mock.gravarRequisicao;
         return registro;
     }
     

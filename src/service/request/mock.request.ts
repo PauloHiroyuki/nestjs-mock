@@ -15,4 +15,6 @@ export class MockRequest {
     charset: string;
     headers: string;
     body: string; 
+    ativo: boolean;
+    gravarRequisicao: boolean;
 }

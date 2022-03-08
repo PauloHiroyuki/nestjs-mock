@@ -41,12 +41,19 @@ export class ExecMockController {
         .status(404)
         .send('Não foi entrado mock para esta endereco "' + endereco + '"');
     }
+
+    if (!mock.ativo) {
+      return response
+        .status(422)
+        .send('Mock está desativado para esta endereco "' + endereco + '"');
+    }
     
-    let requisicao = new Requisicao(request.headers.referer, JSON.stringify(request.headers), JSON.stringify(request.body));
-    this.mockService.adicionarRequisicao(mock.id, requisicao);
+    if (mock.gravarRequisicao) {
+      let requisicao = new Requisicao(request.headers.referer, JSON.stringify(request.headers), JSON.stringify(request.body));
+      this.mockService.adicionarRequisicao(mock.id, requisicao);
+    }
 
     let header = JSON.parse(mock.headers);
-
     return response
       .status(mock.httpStatus)
       .contentType(mock.contentType)
